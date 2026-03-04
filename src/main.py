@@ -1,20 +1,50 @@
-from src.power import power_function
-from src.constants import SAMPLE_CONSTANT
+from sources import FileTaskSource, GeneratorTaskSource, APITaskSource
+from processor import TaskProcessor
+from logger_config import setup_logfing
+import json, logging
+
+
+def create_file():
+    data = [
+        {"id": "file_1", "payload": {"type": "calculation", "value": 42}},
+        {"id": "file_2", "payload": {"type": "validation", "data": [1, 2, 3]}},
+        {"payload": {"type": "no_id"}}
+    ]
+
+    with open("file1.json", "w") as f:
+        json.dump(data, f, indent=2)
+
+    print("Создан файл file1.json")
+
 
 
 def main() -> None:
-    """
-    Обязательнная составляющая программ, которые сдаются. Является точкой входа в приложение
-    :return: Данная функция ничего не возвращает
-    """
+    setup_logfing(logging.INFO)
+    create_file()
+    processor = TaskProcessor()
+    sources = [FileTaskSource('file1.json'),
+               GeneratorTaskSource(count=3, pref='gen'),
+               APITaskSource()]
 
-    target, degree = map(int, input("Введите два числа разделенные пробелом: ").split(" "))
+    for source in sources:
+        if processor.add_source(source):
+            print(f'Источник {source} добавлен')
+        else:
+            print(f'Источник {source} не добавлен')
 
-    result = power_function(target=target, power=degree)
+    print(f'Всего источников: {processor.get_sorce_count()}')
 
-    print(result)
+    print("НАЧАЛО ОБРАБОТКИ ЗАДАЧ")
 
-    print(SAMPLE_CONSTANT)
+    all_tasks = processor.process_all()
+
+    print(f"ИТОГО ПОЛУЧЕНО ЗАДАЧ: {len(all_tasks)}")
+
+    print("\nПервые 5 задач:")
+
+    for i, task in enumerate(all_tasks[:5], 1):
+        print(f"{i}. {task}")
+
 
 if __name__ == "__main__":
     main()
