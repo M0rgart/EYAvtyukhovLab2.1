@@ -1,6 +1,6 @@
 import pytest
 import json
-import logging  # Добавлен недостающий импорт
+import logging
 from unittest.mock import mock_open, patch, MagicMock
 from src.sources import FileTaskSource, GeneratorTaskSource, APITaskSource
 from src.contracts import Task
@@ -215,7 +215,7 @@ class TestAPITaskSource:
         source = APITaskSource(end='https://test.api')
         assert repr(source) == "APITaskSource(endpoint=https://test.api)"
 
-    @patch('random.choice', side_effect=['1', 'medium', '3', 'high', '5'] * 3)  # Увеличено количество значений
+    @patch('random.choice', side_effect=['1', 'medium', '3', 'high', '5'] * 3)
     @patch('random.randint', return_value=50)
     def test_get_tasks(self, mock_randint, mock_choice, caplog):
         """Тест получения задач из API"""
@@ -227,7 +227,7 @@ class TestAPITaskSource:
         assert len(tasks) == 5
         assert isinstance(tasks[0], Task)
 
-        # Проверка структуры задач
+
         for i, task in enumerate(tasks, 1):
             assert task.id == f"api_{i}"
             assert 'topic' in task.payload
@@ -246,10 +246,9 @@ class TestAPITaskSource:
         tasks1 = source.get_tasks()
         tasks2 = source.get_tasks()
 
-        assert tasks1 is not tasks2  # Разные объекты
-        assert tasks1 == tasks2  # Но одинаковое содержимое
+        assert tasks1 is not tasks2
+        assert tasks1 == tasks2
 
-        # Модификация копии не влияет на оригинал
         tasks1.append(Task(id="extra", payload={}))
         assert len(source.get_tasks()) == 5
 
@@ -258,14 +257,12 @@ class TestAPITaskSource:
         source1 = APITaskSource()
         source2 = APITaskSource()
 
-        # Из-за случайности задачи могут отличаться
         tasks1 = source1.get_tasks()
         tasks2 = source2.get_tasks()
 
         assert len(tasks1) == 5
         assert len(tasks2) == 5
 
-        # Проверка допустимых значений
         for task in tasks1:
             assert task.payload['dif'] in ['low', 'medium', 'high']
             assert 10 <= task.payload['points'] <= 100
