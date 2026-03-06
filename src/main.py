@@ -1,6 +1,6 @@
-from sources import FileTaskSource, GeneratorTaskSource, APITaskSource
-from processor import TaskProcessor
-from logger_config import setup_logfing
+from .sources import FileTaskSource, GeneratorTaskSource, APITaskSource
+from .processor import TaskProcessor
+from .logger_config import setup_logfing
 import json, logging
 
 

@@ -1,6 +1,6 @@
 from typing import List
 import logging
-from contracts import Task, TaskSource, check_task_source
+from .contracts import Task, TaskSource, check_task_source
 
 
 logger = logging.getLogger(__name__)

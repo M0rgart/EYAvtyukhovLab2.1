@@ -1,6 +1,6 @@
 import logging
 import json, random, string
-from contracts import Task, TaskSource
+from .contracts import Task, TaskSource
 from typing import List, Generator
 
 
@@ -74,6 +74,11 @@ class APITaskSource:
         self.end = end
         self._tasks = self._generate_mock_tasks()
         logger.info(f"Создан APITaskSource с эндпоинтом {self.end}")
+
+    def get_tasks(self) -> List[Task]:
+        logger.debug(f'Выполняется запрос к {self.end}')
+        logger.info(f'Получено {len(self._tasks)} задач из API')
+        return self._tasks.copy()
 
     def _generate_mock_tasks(self) -> List[Task]:
         tasks = []
