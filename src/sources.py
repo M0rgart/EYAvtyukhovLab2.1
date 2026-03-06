@@ -34,7 +34,7 @@ class FileTaskSource:
             raise FileNotFoundError(f"Файл {self.path} не найден")
         except json.JSONDecodeError as e:
             logger.error(f"Ошибка парсинга JSON в файле {self.path}: {e}")
-            raise json.JSONDecodeError(f"Ошибка парсинга JSON в файле {self.path}: {e}")
+            raise json.JSONDecodeError(f"Ошибка парсинга JSON в файле {self.path}: {e.msg}", e.doc, e.pos)
         except Exception as e:
             logger.error(f"Не предвиденная ошибка: {e}")
             raise
