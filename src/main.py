@@ -1,10 +1,13 @@
-from .sources import FileTaskSource, GeneratorTaskSource, APITaskSource
-from .processor import TaskProcessor
-from .logger_config import setup_logfing
+from src.sources import FileTaskSource, GeneratorTaskSource, APITaskSource
+from src.processor import TaskProcessor
+from src.logger_config import setup_logfing
 import json, logging
 
 
 def create_file():
+    '''
+    Создание файла file1.json с информацией для проверки FileTaskSource
+    '''
     data = [
         {"id": "file_1", "payload": {"type": "calculation", "value": 42}},
         {"id": "file_2", "payload": {"type": "validation", "data": [1, 2, 3]}},
@@ -19,6 +22,10 @@ def create_file():
 
 
 def main() -> None:
+    '''
+    Основная функция. Вызывает настойку логов и создание файла для тестов,
+    FileTaskSource, GeneratorTaskSource, APITaskSource и выводит результат
+    '''
     setup_logfing(logging.INFO)
     create_file()
     processor = TaskProcessor()
